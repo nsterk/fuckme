@@ -48,5 +48,7 @@ If there's extra information included, it will be printed right below the line t
 - which test for that function resulted in KO.
 - extra information about that test.
 
+If the extra information specifies 'KO on return value', this literally means that whatever is specified in the man as return value is not being returned. If the extra information specifies 'KO on destination string/concatenated string/whatever string', this means that you are not copying like the original function does. It's possible to pass a test on return value but KO on what kind of string it produces: for ft_strlcat for instance, your function should concatenate a string like strlcat does ánd return the same value that strlcat does. It is possible to do one, but not the other. 
+
 # HOW TO handle errors in the script
 I don't know man I barely understand how this script even works, I just combined enough stuff I found on the internet until I had a semi-functional script. If you encounter an error you will have to solve it yourself or come back in a year and hope my skills have improved significantly.
