@@ -31,7 +31,7 @@ fuckme.c:line #: Assertion failed: 'extra information'
 
 Line # will be the line of code in fuckme.c where the result from your function is compared with the expected result. For most tests, I include enough information for you not to have to check out the actual code in fuckme.c, not because I want to spare you the trouble but because I don't want you looking at it if I can help it.
 
-### extra information, possibly even in ****colour*****
+### extra information, possibly even in **colour**
 If there's extra information included, it will be printed right below the line that specifies the exact line of code responsible for a KO. This extra information will be, usually:
 - what function KOd
 - which test for that function resulted in KO
