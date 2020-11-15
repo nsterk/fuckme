@@ -6,7 +6,7 @@
 /*   By: nsterk <nsterk@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/11/11 20:00:47 by nsterk        #+#    #+#                 */
-/*   Updated: 2020/11/14 23:57:59 by nsterk        ########   odam.nl         */
+/*   Updated: 2020/11/15 20:34:32 by nsterk        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,22 @@
 #include <limits.h>
 #include <stdlib.h>
 
+static 	void	print_result(char *expected, char *result)
+{
+		//printf("\033[4;37m");
+		printf("\e[4;37mExpected\e[0m: [%s]\n", expected);
+		//printf("\033[0m");
+		//printf(":[%s]\n", expected);
+		printf("\033[4;37m");printf("Got");printf("\033[0m");
+		printf(":	 [%s]\n", result);
+}
+
 /******************************************************************************/
 /*									  PART 1								  */
 /******************************************************************************/
 
 /*	FT_ISALNUM	*/
-Test(PART1, ft_isalnum)
+Test(PART_1, ft_isalnum)
 {
 	cr_expect_eq(ft_isalnum('9'), isalnum('9'));
 	cr_expect_eq(ft_isalnum('?'), isalnum('?'));
@@ -32,7 +42,7 @@ Test(PART1, ft_isalnum)
 	cr_expect_eq(ft_isalnum('{'), isalnum('{'));
 }
 /*	FT_ISALPHA	*/
-Test(PART1, ft_isalpha)
+Test(PART_1, ft_isalpha)
 {
 	cr_expect_eq(ft_isalpha('9'), isalpha('9'));
 	cr_expect_eq(ft_isalpha('?'), isalpha('?'));
@@ -42,7 +52,7 @@ Test(PART1, ft_isalpha)
 	cr_expect_eq(ft_isalpha('{'), isalpha('{'));
 }
 /*	FT_ISASCII	*/
-Test(PART1, ft_isascii)
+Test(PART_1, ft_isascii)
 {
 	cr_expect_eq(ft_isascii(-5), isascii(-5));
 	cr_expect_eq(ft_isascii('?'), isascii('?'));
@@ -52,7 +62,7 @@ Test(PART1, ft_isascii)
 	cr_expect_eq(ft_isascii('{'), isascii('{'));
 }
 /*	FT_ISDIGIT	*/
-Test(PART1, ft_isdigit)
+Test(PART_1, ft_isdigit)
 {
 	cr_expect_eq(ft_isdigit('0'), isdigit('0'));
 	cr_expect_eq(ft_isdigit(0), isdigit(0));
@@ -60,37 +70,176 @@ Test(PART1, ft_isdigit)
 	cr_expect_eq(ft_isdigit('5'), isdigit('5'));
 }
 /*	FT_ISPRINT	*/
-Test(PART1, ft_isprint)
+Test(PART_1, ft_isprint)
 {
 	cr_expect_eq(ft_isprint(31), isprint(31));
 	cr_expect_eq(ft_isprint(32), isprint(32));
 	cr_expect_eq(ft_isprint(127), isprint(127));
 	cr_expect_eq(ft_isprint(126), isprint(126));
 }
+/*	FT_STRLEN	*/
+Test(PART_1, ft_strlen)
+{
+	char *str;
+
+	str = "s to the t to the ring ring ring";
+	cr_expect_eq(strlen(str), ft_strlen(str));
+}
+/*	FT_STRLCPY	*/
+Test(Part_1, ft_strlcpy)
+{
+	char		*str;
+	char		expected[50];
+	char		returned[50];
+	size_t		len;
+
+	//test 1
+	str = "ik word altijd wakker met een wijsje in mijn hoofd";
+	len = 10;
+	cr_expect_eq(strlcpy(expected, str, len), ft_strlcpy(returned, str, len), "[1] KO on return value\n");
+	cr_expect_str_eq(expected, returned, "[1]KO on destination string\n");
+	//test 2
+	str = "loop de hele dag te zingen en te fluuuuuiten";
+	len = 50;
+	cr_expect_eq(strlcpy(expected, str, len), ft_strlcpy(returned, str, len), "[2] KO on return value for len > source length\n");
+	cr_expect_str_eq(expected, returned, "[2]KO on destination string for len > source length\n");
+	//test 3
+	str = "elke morgen wakker met een wijsje in mijn hoofd";
+	len = 0;
+	cr_expect_eq(strlcpy(expected, str, len), ft_strlcpy(returned, str, len), "[3] KO on return value for len = 0\n");
+	cr_expect_str_eq(expected, returned, "[3]KO on destination string for len = 0\n");
+
+	/* DOE DIT TOEVOEGEN ALS CHECK IF FT CRASHES LIKE ITS SUPPOSED TO
+	
+	str = "als ik binnen kom dan rinkelen de ruuuuuuuiten";
+	len = 60;
+	cr_expect_eq(strlcpy(expected, str, len), ft_strlcpy(returned, str, len), "[4] KO on return value for len = 0\n");
+	cr_expect_str_eq(expected, returned, "[4]KO on destination string for len = 0\n");
+	*/
+}
 /*	FT_STRLCAT	*/
-Test(PART1, ft_strlcat)
+Test(PART_1, ft_strlcat)
 {
 	char	src[] = "de bomdiggy";
-	char	dest[100] = "momo is ";
-	char	dest2[100] = "momo is ";
+	size_t	len;
+
 	//test 1
-	cr_expect_eq(ft_strlcat(dest, src, 20), strlcat(dest2, src, 20), "[1] KO on return value");
-	ft_strlcat(dest, src, 20);
-	strlcat(dest2, src, 20);
-	cr_expect_str_eq(dest, dest2, "[1] KO on concatenated string");
+	char	dest1[100] = "momo is ";
+	char	dest11[100] = "momo is ";
+	len = 20;
+	cr_expect_eq(ft_strlcat(dest1, src, len), strlcat(dest11, src, len), "[1] KO on return value");
+	cr_expect_str_eq(dest1, dest11, "[1] KO on concatenated string");
 	//test 2
-	cr_expect_eq(ft_strlcat(dest, src, 10), strlcat(dest2, src, 10), "[2] KO on return value for size < strlen dest");
-	ft_strlcat(dest, src, 10);
-	strlcat(dest2, src, 10);
-	cr_expect_str_eq(dest, dest2, "[2] KO on concatenated string value for size < strlen dest");
+	char	dest2[100] = "momo is de bomshit\0";
+	char	dest22[100] = "momo is de bomshit\0";
+	len = 10;
+	cr_expect_eq(ft_strlcat(dest2, src, len), strlcat(dest22, src, len), "[2] KO on return value for size < strlen dest");
+	cr_expect_str_eq(dest2, dest22, "[2] KO on concatenated string value for size < strlen dest");
 	//test 3
-	cr_expect_eq(ft_strlcat(dest, src, 0), strlcat(dest2, src, 0), "[3] KO on return value for size = 0");
-	ft_strlcat(dest, src, 0);
-	strlcat(dest2, src, 0);
-	cr_expect_str_eq(dest, dest2, "[3] KO on concatenated string for size = 0\n");
+	char	dest3[100] = "momo is ";
+	char	dest33[100] = "momo is ";
+	len = 0;
+	cr_expect_eq(ft_strlcat(dest3, src, len), strlcat(dest33, src, len), "[3] KO on return value for size = 0");
+	cr_expect_str_eq(dest3, dest33, "[3] KO on concatenated string for size = 0\n");
+	//test 4
+	char	dest4[100] = "momo";
+	char	dest44[100] = "momo";
+	len = 10;
+	cr_expect_eq(ft_strlcat(dest4, src, len), strlcat(dest44, src, len), "[4] KO on return value for strlen dest < size");
+	cr_expect_str_eq(dest4, dest44, "[4] KO on concatenated string for strlen dest < size\n");
+}
+/*	FT_STRCHR	*/
+Test(PART_1, ft_strchr)
+{
+	const char	*s;
+	int			c;
+
+	s = "Find char! in this string. do it!";
+	//test 1
+	c = 'n';
+	cr_expect_str_eq(strchr(s, c), ft_strchr(s, c), "KO ft_strchr test 1\n");
+	if (strcmp(strchr(s, c), ft_strchr(s, c)))
+	{
+		printf("Find \e[3;37m[%c]\e[0m in\n	\e[3;37m[%s]\e[0m\n", c, s);
+		print_result(strchr(s, c), ft_strchr(s, c));
+	}
+	//test 2
+	c = '\0';
+	cr_expect_str_eq(strchr(s, c), ft_strchr(s, c), "ft_strchr test 2\n");
+	if (strcmp(strchr(s, c), ft_strchr(s, c)))
+	{
+		printf("Find \e[3;37m[%c]\e[0m in\n	\e[3;37m[%s]\e[0m\n", c, s);
+		print_result(strchr(s, c), ft_strchr(s, c));
+	}
+	//test 3
+	c = '?';
+	cr_expect_null(ft_strchr(s, c), "ft_strchr test 3 - you don't return NULL if str doesn't contain char\n");
+}
+/*	FT_STRRCHR	*/
+Test(PART_1, ft_strrchr)
+{
+	const char	*s;
+	int			c;
+
+	s = "Find char! in this string. do it!";
+	//test 1
+	c = 'n';
+	cr_expect_str_eq(strrchr(s, c), ft_strrchr(s, c), "KO ft_strchr test 1\n");
+	if (strcmp(strrchr(s, c), ft_strrchr(s, c)))
+	{
+		printf("Find \e[3;37m[%c]\e[0m in\n	\e[3;37m[%s]\e[0m\n", c, s);
+		print_result(strrchr(s, c), ft_strrchr(s, c));
+	}
+	//test 2
+	c = '\0';
+	cr_expect_str_eq(strrchr(s, c), ft_strrchr(s, c), "ft_strchr test 2\n");
+	if (strcmp(strrchr(s, c), ft_strrchr(s, c)))
+	{
+		printf("Find \e[3;37m[%c]\e[0m in\n	\e[3;37m[%s]\e[0m\n", c, s);
+		print_result(strrchr(s, c), ft_strrchr(s, c));
+	}
+	//test 3
+	c = '?';
+	cr_expect_null(ft_strchr(s, c), "ft_strchr test 3 - you don't return NULL if str doesn't contain char\n");
+}
+/*	FT_STRNCMP	*/
+Test(PART_1, ft_strncmp)
+{
+	char	*s1;
+	char	*s2;
+	size_t	len;
+
+	//test 1
+	s1 = "1234578";
+	s2 = "12345678";
+	len = 5;
+	cr_expect_eq(strncmp(s1, s2, len), ft_strncmp(s1, s2, len), "KO ft_strncmp test 1\n");
+	if (strncmp(s1, s2, len) != ft_strncmp(s1, s2, len))
+	{
+		printf("s1 [%s], s2 [%s], len %zu\n", s1, s2, len);
+		printf("Expected: [%i], got: [%i]\n", strncmp(s1, s2, len), ft_strncmp(s1, s2, len));
+	}
+	// test 2
+	len = 6;
+	cr_expect_eq(strncmp(s1, s2, len), ft_strncmp(s1, s2, len), "KO ft_strncmp test 2\n");
+	if (strncmp(s1, s2, len) != ft_strncmp(s1, s2, len))
+	{
+		printf("s1 [%s], s2 [%s], len %zu\n", s1, s2, len);
+		printf("Expected: [%i], got: [%i]\n", strncmp(s1, s2, len), ft_strncmp(s1, s2, len));
+	}
+	// test 3
+	s1 = "1234\0 578";
+	s2 = "1234\0 5678";
+	len = 15;
+	cr_expect_eq(strncmp(s1, s2, len), ft_strncmp(s1, s2, len), "KO ft_strncmp test 3\n");
+	if (strncmp(s1, s2, len) != ft_strncmp(s1, s2, len))
+	{
+		printf("s1 [1234\\0 578], s2 [1234\\0 5678], len %zu\n", len);
+		printf("Expected: [%i], got: [%i]\n", strncmp(s1, s2, len), ft_strncmp(s1, s2, len));
+	}
 }
 /*	FT_MEMCPY	*/
-Test(PART1, ft_memcpy)
+Test(PART_1, ft_memcpy)
 {	
 	//test 1 this sucks i got stuck because my own ft_memcpy was failing and i still dont get it im sick of this test so moving forward
 	// oh my god i was testing it with cr_expect_eq instead of cr_expect_str_eq fuck me 
@@ -105,7 +254,7 @@ Test(PART1, ft_memcpy)
 	cr_expect_str_eq(ptr, ptr2, "[1] KO");
 }
 /*	FT_MEMCCPY	*/
-Test(PART1, ft_memccpy)
+Test(PART_1, ft_memccpy)
 {	
 	//i know this is really ugly
 	//test 1
@@ -257,6 +406,22 @@ Test(PART_1, ft_atoi)
 	//test7
 	number_string = "-2147483647";
 	cr_expect_eq(atoi(number_string), ft_atoi(number_string));
+}
+/*	FT_STRDUP	*/
+Test(PART_1, ft_strdup)
+{
+	char	*source;
+	char	*expected;
+	char	*returned;
+
+	source = "copyyyyyyyyy";
+	expected = strdup(source);
+	returned = ft_strdup(source);
+	cr_expect_str_eq(expected, returned, "KO ft_strdup");
+	if (expected)
+		free (expected);
+	if (returned)
+		free (returned);
 }
 
 /******************************************************************************/
@@ -597,8 +762,10 @@ Test(PART_2, ft_strjoin)
 //static function to print results for ft_strim (in case of KO)
 static 	void	print_trim(char *expected, char *result)
 {
-		printf("\033[4;37m");printf("Expected");printf("\033[0m");
-		printf(":[%s]\n", expected);
+		//printf("\033[4;37m");
+		printf("\e[4;37mExpected\e[0m: [%s]\n", expected);
+		//printf("\033[0m");
+		//printf(":[%s]\n", expected);
 		printf("\033[4;37m");printf("Got");printf("\033[0m");
 		printf(":	 [%s]\n", result);
 }
