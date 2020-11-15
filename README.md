@@ -6,7 +6,7 @@ It's also my first attempt at any type of unit tester so... yeah
 # HOW TO fuckme
 You will need to have Criterion installed (https://github.com/Snaipe/Criterion).
 
-The default path to your libft is set to ./libft - meaning that fuckme will search the current directory for a subdirectory called 'libft' and use the contents of that directory. If you want to change the path you can do so in config.sh
+The default path to your libft is set to ./libft - meaning that fuckme will search the current directory for a subdirectory called 'libft' and use the contents of that directory. If you want to change the path you can do so in config.sh. But please don't cause I am actually not sure the tests will still run. Just make a subdirectory libft OK, please just do that.
 
 If the config file points to your libft folder, execute the test script with ./fuckme.sh
 
