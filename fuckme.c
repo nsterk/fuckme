@@ -6,7 +6,7 @@
 /*   By: nsterk <nsterk@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/11/11 20:00:47 by nsterk        #+#    #+#                 */
-/*   Updated: 2020/11/15 20:34:32 by nsterk        ########   odam.nl         */
+/*   Updated: 2020/11/29 19:44:57 by nsterk        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -238,6 +238,25 @@ Test(PART_1, ft_strncmp)
 		printf("Expected: [%i], got: [%i]\n", strncmp(s1, s2, len), ft_strncmp(s1, s2, len));
 	}
 }
+/*	FT_MEMCMP	*/
+Test(PART_1, ft_memcmp)
+{
+	char	*s1;
+	char	*s2;
+	size_t	n;
+
+	s1 = "012345a";
+	s2 = "01234567";
+	n = 5;
+	cr_expect_eq(ft_memcmp(s1, s2, n), memcmp(s1, s2, n));
+	n = 6;
+	cr_expect_eq(ft_memcmp(s1, s2, n), memcmp(s1, s2, n));
+	n = 7;
+	cr_expect_eq(ft_memcmp(s1, s2, n), memcmp(s1, s2, n));
+	s2 = "012345a\200";
+	n = 10;
+	cr_expect_eq(ft_memcmp(s1, s2, n), memcmp(s1, s2, n));
+}
 /*	FT_MEMCPY	*/
 Test(PART_1, ft_memcpy)
 {	
@@ -275,8 +294,8 @@ Test(PART_1, ft_memset)
 	int c = 'x';
 	
 	//test 1
-	memset(expected, c, 0);
-	ft_memset(returned, c, 0);
+	memset(expected, c, 1);
+	ft_memset(returned, c, 1);
 	cr_expect_str_eq(expected, returned);
 	//test 2
 	memset(expected, c, 5);
@@ -362,6 +381,7 @@ Test(PART1, ft_strnstr)
 	needle = "abac";
 	len = 50;
 	cr_expect_str_eq(ft_strnstr(haystack, needle, len), strnstr(haystack, needle, len), "[9] KO: Your ft_strnstr doesn't pick up search in the correct location if a match turns out to be only partial match\nTest: find \"abac\" in \"ababac\"");
+
 }
 /*	FT_TOUPPER	*/
 Test(Part_1, ft_toupper)
@@ -369,6 +389,10 @@ Test(Part_1, ft_toupper)
 	cr_expect_eq(toupper('&'), ft_toupper('&'));
 	cr_expect_eq(toupper('A'), ft_toupper('A'));
 	cr_expect_eq(toupper('a'), ft_toupper('a'));
+	cr_expect_eq(toupper('`'), ft_toupper('`'));
+	cr_expect_eq(toupper('{'), ft_toupper('{'));
+	cr_expect_eq(toupper('z'), ft_toupper('z'));
+	cr_expect_eq(toupper('Z'), ft_toupper('Z'));
 }
 /*	FT_TOLOWER	*/
 Test(Part_1, ft_tolower)
@@ -376,6 +400,9 @@ Test(Part_1, ft_tolower)
 	cr_expect_eq(tolower('&'), ft_tolower('&'));
 	cr_expect_eq(tolower('A'), ft_tolower('A'));
 	cr_expect_eq(tolower('a'), ft_tolower('a'));
+	cr_expect_eq(tolower('Z'), ft_tolower('Z'));
+	cr_expect_eq(tolower('['), ft_tolower('['));
+	cr_expect_eq(tolower('@'), ft_tolower('@'));
 }
 /*	FT_ATOI		*/
 Test(PART_1, ft_atoi)
@@ -405,6 +432,12 @@ Test(PART_1, ft_atoi)
 	cr_expect_eq(atoi(number_string), ft_atoi(number_string));
 	//test7
 	number_string = "-2147483647";
+	cr_expect_eq(atoi(number_string), ft_atoi(number_string));
+	//test8
+	number_string = "-2147a483647";
+	cr_expect_eq(atoi(number_string), ft_atoi(number_string));
+	//test9
+	number_string = "-2147 483647";
 	cr_expect_eq(atoi(number_string), ft_atoi(number_string));
 }
 /*	FT_STRDUP	*/
@@ -846,6 +879,7 @@ Test(PART_2, ft_strtrim)
 	}
 	if (result)
 		free(result);
+
 	//test 6: set is NULL pointer
 	str = "aaaaaaaaaaa";
 	set = NULL;
@@ -860,6 +894,7 @@ Test(PART_2, ft_strtrim)
 	}
 	if (result)
 		free(result);
+
 	//test 7: string is NULL pointer
 	str = NULL;
 	set = "not null";
