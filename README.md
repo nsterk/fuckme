@@ -12,8 +12,11 @@ Dude, why not. I'm trying to make the tests reaaally exhaustive so you will be p
 - the shell script is flaky as fuck that shit is not reliable at all, I definitely want to improve it. Or just generally make it not suck.
 
 # HOW TO fuckme
+## Criterion
 You will need to have Criterion installed (https://github.com/Snaipe/Criterion).
+If you are trying to install Criterion from Codam, you might run into a problem installing Homebrew. Use the bot 'Le Gardien' and give it the command !brew to get more information on how to install.
 
+## Where to copy libft folder
 The default path to your libft is set to ./libft - meaning that fuckme will search the current directory for a subdirectory called 'libft' and use the contents of that directory. If you want to change the path you can do so in config.sh. But please don't cause I am actually not sure the tests will still run. Just make a subdirectory libft OK, please just do that.
 
 If the config file points to your libft folder, execute the test script with ./fuckme.sh.
@@ -33,7 +36,7 @@ Tests are organized as such: part_number, ft_name. This information is provided 
 
 This tells you the test that produced a KO belongs to a function from part #, the function being ft_name.
 
-! some functions, like ft_split and ft_substr, are open to interpretation, for example on how to handle NULL parameters. You might get a KO because your interpretation is different then mine. I think I specified this for every test that is open to interpretation, but just to be sure do keep this in mind.
+! some functions, like ft_split and ft_substr, are open to interpretation, for example on how to handle NULL parameters. You might get a KO because your interpretation is different from mine. I think I specified this for every test that is open to interpretation, but just to be sure do keep this in mind.
 
 ### The exact line of code responsible for a KO
 If a test fails - if it KOs - criterion will show not only FAIL but also the exact line of code that prompted this, like so:
